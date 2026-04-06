@@ -1,34 +1,88 @@
-# Joblit
+# mlMiniproject
 
-AI-assisted, ATS-friendly resume builder (Next.js 14). Local demo works without API keys; add `GROQ_API_KEY` for live AI.
+This repository contains:
 
-## Run locally
+1. **Joblit** (root) — Next.js 14 resume builder with live PDF preview and optional Groq AI.
+2. **`web/`** — separate Expo (React Native) app configured for web; used by the current Vercel project settings in `vercel.json`.
+
+---
+
+## Prerequisites
+
+- **Node.js** 18+ for Joblit; **20.19.4+** recommended if you run the Expo app in `web/` (see `web/package.json` `engines`).
+- **npm** (comes with Node).
+
+---
+
+## After you clone or pull
+
+Always work from the folder that contains this `README.md` (the repo root).
+
+```bash
+cd mlMiniproject   # or your clone folder name
+git pull origin main
+```
+
+### Run Joblit (Next.js) — main app at repo root
+
+From the **repository root** (not inside `web/`):
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Try **Open builder** → `/builder/demo`.
+- Open **http://localhost:3000**
+- Use **Open builder** on the home page, or go directly to **http://localhost:3000/builder/demo** for the sample resume.
 
-## Push to GitHub (one-time setup)
+**Optional — real AI (Groq):**
 
-1. Log in to GitHub from this machine (browser):
-
-   ```bash
-   gh auth login -h github.com -p https -w
-   ```
-
-2. Create the repo and push `main`:
+1. Copy env template and add your key:
 
    ```bash
-   npm run push:github
+   cp .env.example .env.local
    ```
 
-   Or: `./scripts/push-to-github.sh`
+2. Set `GROQ_API_KEY` in `.env.local` (from [Groq Console](https://console.groq.com/)).  
+   If you skip this, the app still runs using **demo fallbacks** for AI routes.
 
-Optional: `GITHUB_REPO_NAME=my-repo-name` if `joblit` is taken.
+**Production build (sanity check):**
 
-## Deploy (Vercel)
+```bash
+npm run build
+npm start
+```
 
-Import the GitHub repo, set `GROQ_API_KEY` in project settings if you want real AI responses.
+---
+
+### Run the `web/` Expo app (optional)
+
+Only if you need the older Expo project:
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
+Follow the terminal URL (Expo usually opens a dev page; port may differ from 3000).
+
+---
+
+## Deploy on Vercel
+
+`vercel.json` at the repo root points the Vercel **install** and **build** at the **`web/`** app (`installCommand` / `buildCommand` / `outputDirectory`).  
+
+Deploying **Joblit** from the repo root on Vercel requires changing the Vercel project to use the root `package.json` (Framework Preset: Next.js, root directory: `.`), or a separate Vercel project — it is **not** what the current `vercel.json` builds.
+
+---
+
+## Git push (contributors)
+
+```bash
+git add -A
+git commit -m "Your message"
+git push origin main
+```
+
+Or use `npm run push:github` if you use the included script and `gh` CLI.
